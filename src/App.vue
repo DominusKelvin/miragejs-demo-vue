@@ -1,16 +1,34 @@
+<!-- src/App.vue -->
 <template>
-  <ul id="todos">
-    <li v-for="todo in todos" v-bind:key="todo.id">{{ todo.content }}</li>
-  </ul>
+  <div v-if="serverError" data-testid="server-error">
+    {{ serverError }}
+  </div>
+
+  <div v-else-if="todos.length === 0" data-testid="no-todos">
+    No todos!
+  </div>
+
+  <div v-else>
+    <ul id="todos">
+      <li
+        v-for="todo in todos"
+        v-bind:key="todo.id"
+        :data-testid="'todo-' + todo.id"
+      >
+        {{ todo.content }}
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
   export default {
-    name: 'app',
+    name: "app",
 
     data() {
       return {
-        todos: []
+        todos: [],
+        serverError: null,
       }
     },
 
@@ -18,12 +36,12 @@
       fetch("/api/todos")
         .then(res => res.json())
         .then(json => {
-          this.todos = json.todos
+          if (json.error) {
+            this.serverError = json.error
+          } else {
+            this.todos = json.todos
+          }
         })
-    }
+    },
   }
 </script>
-
-<style lang="scss" scoped>
-
-</style>
