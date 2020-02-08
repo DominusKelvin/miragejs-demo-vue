@@ -1,32 +1,29 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <ul id="todos">
+    <li v-for="todo in todos" v-bind:key="todo.id">{{ todo.content }}</li>
+  </ul>
 </template>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+  export default {
+    name: 'app',
 
-#nav {
-  padding: 30px;
-}
+    data() {
+      return {
+        todos: []
+      }
+    },
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+    created() {
+      fetch("/api/todos")
+        .then(res => res.json())
+        .then(json => {
+          this.todos = json.todos
+        })
+    }
+  }
+</script>
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
+<style lang="scss" scoped>
+
 </style>
