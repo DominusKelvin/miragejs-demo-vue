@@ -8,7 +8,7 @@ let server = new Server({
   environment,
 
   models: {
-    todo: Model.extend(),
+    todo: Model,
   },
 
   seeds(server) {
